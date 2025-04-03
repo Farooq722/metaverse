@@ -7,10 +7,13 @@ export const userRouter = Router();
 
 userRouter.post("/metadata", userMiddleware, async (req, res) => {
     const parsedData = UpdateMetadataSchema.safeParse(req.body);
+    console.log(req.body);
+    
     if(!parsedData.success) {
         res.status(400).json({
             msg: "Validation failed"
         })
+        return
     }
 
     await prisma.user.update({
@@ -21,7 +24,7 @@ userRouter.post("/metadata", userMiddleware, async (req, res) => {
             avatarId: parsedData.data?.avatarId
         }
     })
-    res.json({msg: "Metadata updated"})
+   res.status(200).json({msg: "Metadata updated"})
 })
 
 userRouter.get("/metadata/bulk", async (req, res) => {
